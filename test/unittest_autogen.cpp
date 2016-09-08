@@ -2,8 +2,8 @@
 #define BOOST_TEST_MODULE EvaluationTests
 #include <boost/test/unit_test.hpp>
 
-#include <evaluation.h>
-#include <parser.h>
+#include "../src/evaluation.h"
+#include "../src/parser.h"
 
 
 BOOST_AUTO_TEST_CASE(Test_0)
