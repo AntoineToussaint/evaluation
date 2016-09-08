@@ -66,12 +66,13 @@ class EvaluationTest:
             expression = replace_in_expression(expression, self.new_values)
             self.new_values[name] = eval(expression)
 
-BOOST_TEST_TEMPLATE = """
-#define BOOST_TEST_MODULE EvaluationTests
+BOOST_TEST_TEMPLATE = """#define BOOST_TEST_MODULE EvaluationTests
 #include <boost/test/unit_test.hpp>
+#include "../src/evaluation.h"
+#include "../src/parser.h"
 
-#include "evaluation.h"
-#include "parser.h"
+
+using namespace boost::unit_test;
 
 MY_TESTS
 """
