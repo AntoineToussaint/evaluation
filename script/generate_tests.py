@@ -1,6 +1,13 @@
 """ Automatically generate unit tests
-""" 
+"""
+import os, sys
+
 from xml_generator import create_xml 
+
+SCRIPT_PATH = os.path.dirname(os.path.realpath(__file__))
+UNIT_TEST_PATH = os.path.normpath(os.path.join(SCRIPT_PATH, '../test/unittest_autogen.cpp'))
+UNIT_TEST_DATA_DIR = 'data'
+UNIT_TEST_XML_PATH = os.path.normpath(os.path.join(SCRIPT_PATH, '../test/' + UNIT_TEST_DATA_DIR))
 
 UNIT_TEST_TEMPLATE = """
 BOOST_AUTO_TEST_CASE(Test_NUM)
@@ -17,8 +24,8 @@ MATH_REPLACE = {
         'exp': 'math.exp'
         }
 
-def get_xml_fname(test_id):
-    return 'test_%s.xml' % test_id
+def get_xml_fname(path, test_id):
+    return '{path}/test_{id}.xml'.format(path=path, id=test_id)
 
 def replace_in_expression(expr, variable_values):
     for variable, value in variable_values.items():
@@ -32,7 +39,7 @@ class EvaluationTest:
     def generate_test(self, test_id):
         # let's get the values
         # 0. Generate the xml
-        create_xml(self.expressions, get_xml_fname(test_id), False)
+        create_xml(self.expressions, get_xml_fname(UNIT_TEST_XML_PATH, test_id), False)
         # 1. Compute values
         self.compute_values() 
         # 2. Generate unit test
@@ -41,7 +48,7 @@ class EvaluationTest:
     def generate_code(self, test_id):
         result = UNIT_TEST_TEMPLATE
         replacements = { 'NUM': str(test_id) }
-        replacements['FNAME'] = get_xml_fname(test_id)
+        replacements['FNAME'] = get_xml_fname(UNIT_TEST_DATA_DIR, test_id)
         replacements['INPUT'] = '\n'.join(['// %s' % expr for expr in self.expressions])
         replacements['SET_VARIABLES'] = '\n'.join(['context.setVariable("%s", %s);' % (variable, value) for variable, value in
                 self.variable_values.items()]) 
@@ -86,7 +93,16 @@ class UnitTestGenerator:
 
 #####################################################################
 
+def run():
+    # Default location of tests
+
+    pass
+    
+if __name__=='__main':
+    sys.exit(run())
+
+
 gen = UnitTestGenerator()
 gen.add_test(['X=3', 'Y=X+1+2+z'], {'z': 0.5})
 gen.add_test(['X=exp(y)', 'Z=1*X'], {'y': 0.5})
-gen.generate_unit_test('test/automatically_generated.cpp')
+gen.generate_unit_test(UNIT_TEST_PATH)

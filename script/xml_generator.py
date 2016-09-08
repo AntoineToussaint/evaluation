@@ -111,6 +111,7 @@ def create_xml(lines, fname, display = True):
     
     for line in lines:
         (expression_name, expression) = process_line(line)
+        root.append(ET.Comment(line))
         parsed_expression = expr.parseString(expression)[0]
         expression_node = ET.SubElement(root, "variable", value=expression_name)
         add_expression(expression_node, parsed_expression)

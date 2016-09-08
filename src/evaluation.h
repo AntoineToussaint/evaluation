@@ -152,9 +152,14 @@ class EvaluationContext {
     void addVariable(const std::string& name, const VariableNode::Ptr& variable) {
         d_variableMap[name] = variable;
     }
-    void setVariable(const std::string& name, double value) {
-        d_variableMap[name]->set(value);
-    }
+    
+    //! Set a variable to a given value when it exists.
+    /*!
+      Doesn't do anything if variable isn't known to context.
+    */
+    void setVariable(const std::string& name, double value);
+    
+    
     double calc(const std::string& expression_name) {
         for(auto& expression : d_expressions) {
             expression->calc();

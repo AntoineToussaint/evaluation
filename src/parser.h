@@ -4,9 +4,11 @@
 #include "evaluation.h"
 
 class EvaluationParser {
-    public:
-    static UnaryOperatorNode::Function GetUnaryFunction(const std::string& name);
-    static BinaryOperatorNode::Function GetBinaryFunction(const std::string& name);
+   public:
+    static UnaryOperatorNode::Function GetUnaryFunction(
+        const std::string& name);
+    static BinaryOperatorNode::Function GetBinaryFunction(
+        const std::string& name);
     static EvaluationContext CreateFromFile(const std::string& fname);
 };
 
