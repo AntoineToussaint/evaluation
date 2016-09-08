@@ -1,10 +1,11 @@
 
 #define BOOST_TEST_MODULE EvaluationTests
 #include <boost/test/unit_test.hpp>
-
 #include "../src/evaluation.h"
 #include "../src/parser.h"
 
+
+using namespace boost::unit_test;
 
 BOOST_AUTO_TEST_CASE(Test_0)
 {
