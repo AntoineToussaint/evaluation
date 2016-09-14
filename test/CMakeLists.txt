@@ -3,7 +3,7 @@ include_directories (${TEST_SOURCE_DIR}/src
                      ${Boost_INCLUDE_DIRS}
                      )
 add_definitions (-DBOOST_TEST_DYN_LINK)
-#execute_process(COMMAND python script/generate_tests.py)
+execute_process(COMMAND python script/generate_tests.py)
 add_executable (Test unittest_autogen.cpp)
 target_link_libraries (Test
                        Eval
