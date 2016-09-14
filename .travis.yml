@@ -9,4 +9,4 @@ before_script:
   - sudo apt-get install libboost-thread-dev libboost-system-dev libboost-test-dev libboost-filesystem-dev
 # Build steps
 script:
-  - cmake . && make
+  - cmake . && make && make test
