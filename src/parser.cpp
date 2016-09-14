@@ -10,27 +10,27 @@
 UnaryOperatorNode::Function EvaluationParser::GetUnaryFunction(
     const std::string &name) {
     if (name == std::string("!"))
-        return [](auto x) { return x; };  // factorial TODO
-    if (name == std::string("-")) return [](auto x) { return -x; };
-    if (name == std::string("cos")) return [](auto x) { return cos(x); };
-    if (name == std::string("sin")) return [](auto x) { return sin(x); };
-    if (name == std::string("exp")) return [](auto x) { return exp(x); };
-    if (name == std::string("log")) return [](auto x) { return log(x); };
+        return [](double x) { return x; };  // factorial TODO
+    if (name == std::string("-")) return [](double x) { return -x; };
+    if (name == std::string("cos")) return [](double x) { return cos(x); };
+    if (name == std::string("sin")) return [](double x) { return sin(x); };
+    if (name == std::string("exp")) return [](double x) { return exp(x); };
+    if (name == std::string("log")) return [](double x) { return log(x); };
     throw std::runtime_error(std::string("Unknown unary function: ") + name);
 }
 
 BinaryOperatorNode::Function EvaluationParser::GetBinaryFunction(
     const std::string &name) {
-    if (name == std::string("+")) return [](auto x, auto y) { return x + y; };
-    if (name == std::string("-")) return [](auto x, auto y) { return x - y; };
-    if (name == std::string("*")) return [](auto x, auto y) { return x * y; };
-    if (name == std::string("/")) return [](auto x, auto y) { return x / y; };
+    if (name == std::string("+")) return [](double x, double y) { return x + y; };
+    if (name == std::string("-")) return [](double x, double y) { return x - y; };
+    if (name == std::string("*")) return [](double x, double y) { return x * y; };
+    if (name == std::string("/")) return [](double x, double y) { return x / y; };
     if (name == std::string("max"))
-        return [](auto x, auto y) { return std::max(x, y); };
+        return [](double x, double y) { return std::max(x, y); };
     if (name == std::string("min"))
-        return [](auto x, auto y) { return std::min(x, y); };
+        return [](double x, double y) { return std::min(x, y); };
     if (name == std::string("^"))
-        return [](auto x, auto y) { return std::pow(x, y); };
+        return [](double x, double y) { return std::pow(x, y); };
     throw std::runtime_error(std::string("Unknown binary function: ") + name);
 }
 

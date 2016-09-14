@@ -7,4 +7,5 @@ Makefile
 *.xml
 Testing
 test/Test
+test/unittest_autogen.cpp
 *.a
