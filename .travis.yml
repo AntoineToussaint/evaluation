@@ -6,8 +6,7 @@ compiler:
 before_script:
   - sudo apt-get update -qq
   - sudo apt-get install libboost-thread-dev libboost-system-dev libboost-test-dev libboost-filesystem-dev
-install:
-  - pip install -r requirements.txt
+  - sudo pip install -r requirements.txt
 # Build steps
 script:
   - cmake . && make && make test
