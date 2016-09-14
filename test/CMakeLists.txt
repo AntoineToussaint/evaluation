@@ -11,3 +11,4 @@ target_link_libraries (Test
                        ${Boost_SYSTEM_LIBRARY}
                        ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY}
                        )
+add_test(test Test)

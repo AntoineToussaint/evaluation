@@ -5,5 +5,5 @@ set(CMAKE_CXX_FLAGS "-std=c++1y")
 project (Evaluation)
 add_subdirectory (src)
 
-enable_testing ()
-add_subdirectory (test)
+enable_testing()
+add_subdirectory(test)
