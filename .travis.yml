@@ -10,7 +10,6 @@ install:
   - sudo pip install -r requirements.txt
 # Build steps
 script:
-  - python script/generate_tests.py
   - ls .
   - ls test/data
   - cmake . && make && make test
