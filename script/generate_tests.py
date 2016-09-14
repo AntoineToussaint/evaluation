@@ -52,7 +52,7 @@ class EvaluationTest:
         replacements['INPUT'] = '\n'.join(['// %s' % expr for expr in self.expressions])
         replacements['SET_VARIABLES'] = '\n'.join(['context.setVariable("%s", %s);' % (variable, value) for variable, value in
                 self.variable_values.items()]) 
-        replacements['CHECKS'] = '\n'.join(['BOOST_TEST(%s == context.calc("%s"));' % (value, name) for name, value in
+        replacements['CHECKS'] = '\n'.join(['BOOST_CHECK(%s == context.calc("%s"));' % (value, name) for name, value in
             self.new_values.items()])
         result = replace_in_expression(result, replacements)
         return result
