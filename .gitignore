@@ -6,4 +6,5 @@ Makefile
 *.cmake
 *.xml
 Testing
+test/Test
 *.a
