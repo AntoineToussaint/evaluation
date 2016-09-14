@@ -12,5 +12,5 @@ before_install:
   - sudo apt-get install libboost-thread-dev libboost-system-dev libboost-test-dev libboost-filesystem-dev
 # Build steps
 script:
-  - sudo pip install -r requirements.txt
+  - sudo pip3 install -r requirements.txt
   - cmake . && make && make test
