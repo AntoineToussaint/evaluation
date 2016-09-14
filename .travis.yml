@@ -8,7 +8,7 @@ before_script:
   - sudo apt-get install libboost-thread-dev libboost-system-dev libboost-test-dev libboost-filesystem-dev
 install:
   - sudo pip install -r requirements.txt
-  - python script/generate_tests.py
 # Build steps
 script:
+  - python script/generate_tests.py
   - cmake . && make && make test

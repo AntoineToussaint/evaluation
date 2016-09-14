@@ -24,7 +24,7 @@ BOOST_AUTO_TEST_CASE(Test_1)
 // Z=1*X
 auto context = EvaluationParser::CreateFromFile("data/test_1.xml");
 context.setVariable("y", 0.5);
-BOOST_CHECK(1.6487212707001282 == context.calc("Z"));
 BOOST_CHECK(1.6487212707001282 == context.calc("X"));
+BOOST_CHECK(1.6487212707001282 == context.calc("Z"));
 }
 
