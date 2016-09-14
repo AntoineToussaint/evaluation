@@ -15,7 +15,7 @@ class EvalNode {
     public:
     using Ptr = std::shared_ptr<EvalNode>;
     double calc() {
-        if (isnan(d_cachedValue) || needCalc()) {
+        if (std::isnan(d_cachedValue) || needCalc()) {
             auto value = eval();
             d_cachedValue = value;
             return value;
@@ -69,7 +69,7 @@ class VariableNode: public EvalNode {
     public:
     using Ptr = std::shared_ptr<VariableNode>;
     virtual double eval() {
-        if (isnan(d_value)) {
+        if (std::isnan(d_value)) {
             throw std::runtime_error("Variable not set");
         } else {
             return d_value;
