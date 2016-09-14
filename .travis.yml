@@ -1,4 +1,6 @@
 # Enable C++ support
+sudo: required
+dist: precise
 language: cpp
 # Compiler selection
 matrix:
