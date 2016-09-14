@@ -29,5 +29,5 @@ install:
   - sudo pip install -r requirements.txt
 # Build steps
 script:
-  -echo $COMPILER
+  - echo $COMPILER
   - cmake -DCMAKE_CXX_COMPILER=$COMPILER . && make && make test
