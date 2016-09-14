@@ -6,8 +6,8 @@ compiler:
 before_script:
   - sudo apt-get update -qq
   - sudo apt-get install libboost-thread-dev libboost-system-dev libboost-test-dev libboost-filesystem-dev
-  - sudo pip install -r requirements.txt
 install:
+  - sudo pip install -r requirements.txt
   - python script/generate_tests.py
 # Build steps
 script:
