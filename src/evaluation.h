@@ -11,10 +11,17 @@
 #include <map>
 
 class EvalNode {
-    double d_cachedValue = nan("");
+    mutable double d_cachedValue = nan("");
+    protected:
+    double cacheValue() const {
+        return d_cachedValue;
+    }
+    void cacheValue(double value) {
+        d_cachedValue = value;
+    }
     public:
     using Ptr = std::shared_ptr<EvalNode>;
-    double calc() {
+    double calc() const {
         if (std::isnan(d_cachedValue) || needCalc()) {
             auto value = eval();
             d_cachedValue = value;
@@ -24,9 +31,11 @@ class EvalNode {
             return d_cachedValue;
         }
     }
-    virtual double eval() = 0;
-    virtual bool needCalc() { return true; }
+    virtual double eval() const = 0;
+    virtual bool needCalc() const { return true; }
     virtual ~EvalNode();
+    EvalNode() {}
+    EvalNode(double value) : d_cachedValue(value) {}
 };
 
 class ExpressionNode : public EvalNode {
@@ -34,58 +43,56 @@ class ExpressionNode : public EvalNode {
     std::string d_name;
     public:
     using Ptr = std::shared_ptr<ExpressionNode>;
-    virtual double eval() {
+    virtual double eval() const {
         return d_expression->eval();
     }
     ExpressionNode(const std::string &name, const EvalNode::Ptr &expression)
         : d_expression(expression), d_name(name) {
       std::cout << "Expression created: " << d_name << std::endl;
     }
-    virtual bool needCalc() { return d_expression->needCalc(); }
+    virtual bool needCalc() const { return d_expression->needCalc(); }
     
 };
 
 class ConstantNode : public EvalNode {
-    double d_value;
     public:
-    virtual double eval() {
-        return d_value;
+    virtual double eval() const {
+      return cacheValue();
     }
     //! Constant node.
     /*!
       Right now, values are double only but takes anything that cast to a double.
     */
     template<class T>
-    ConstantNode(const T& value) : d_value(static_cast<double>(value)) {
-      std::cout << "Constant created: " << d_value << std::endl;
+    ConstantNode(const T& value) : EvalNode(static_cast<double>(value)) {
+      std::cout << "Constant created: " << cacheValue() << std::endl;
     }
-    virtual bool needCalc() { return false; }
+    virtual bool needCalc() const { return false; }
 };
 
 class VariableNode: public EvalNode {
     bool d_needCalc = true;
-    double d_value = nan("");
     std::string d_name;
     public:
     using Ptr = std::shared_ptr<VariableNode>;
-    virtual double eval() {
-        if (std::isnan(d_value)) {
+    virtual double eval() const {
+        if (std::isnan(cacheValue())) {
             throw std::runtime_error("Variable not set");
         } else {
-            return d_value;
+	    return cacheValue();
         }
     };
     VariableNode(const std::string& name) : d_name(name) {
       std::cout << "Variable created: " << d_name << std::endl;
     }
     void set(double value) {
-        d_value = value;
+        cacheValue(value);
         d_needCalc = true;
     }
     void cache() {
         d_needCalc = false;
     }
-    virtual bool needCalc() { return d_needCalc; }
+    virtual bool needCalc() const { return d_needCalc; }
 };
 
 class UnaryOperatorNode : public EvalNode {
@@ -95,14 +102,14 @@ class UnaryOperatorNode : public EvalNode {
     EvalNode::Ptr d_node;
     Function d_function;
     public:
-    virtual double eval() {
+    virtual double eval() const {
         return d_function(d_node->eval());   
     };
     UnaryOperatorNode(const EvalNode::Ptr &node, const Function &function)
         : d_node(node), d_function(function) {
       std::cout << "UnaryOperatorNode created: " << std::endl;
     }
-    virtual bool needCalc() { return d_node->needCalc(); }
+    virtual bool needCalc() const { return d_node->needCalc(); }
 };
 
 class BinaryOperatorNode : public EvalNode {
@@ -112,14 +119,14 @@ class BinaryOperatorNode : public EvalNode {
     EvalNode::Ptr d_leftNode, d_rightNode;
     Function d_function;
     public:
-    virtual double eval() {
+    virtual double eval() const {
         return d_function(d_leftNode->eval(), d_rightNode->eval());   
     };
     BinaryOperatorNode(const EvalNode::Ptr& leftNode, const EvalNode::Ptr& rightNode, const Function& function) :
         d_leftNode(leftNode), d_rightNode(rightNode), d_function(function) {
       std::cout << "BinaryOperatorNode created: " << std::endl;
     }
-    virtual bool needCalc() { return d_leftNode->needCalc() || d_rightNode->needCalc(); }
+    virtual bool needCalc() const { return d_leftNode->needCalc() || d_rightNode->needCalc(); }
 };
 
 class EvaluationContext {
