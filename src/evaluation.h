@@ -35,7 +35,7 @@ class ExpressionNode : public EvalNode {
     public:
     using Ptr = std::shared_ptr<ExpressionNode>;
     virtual double eval() {
-        return d_expression->eval();
+        return d_expression->calc();
     }
     ExpressionNode(const std::string &name, const EvalNode::Ptr &expression)
         : d_expression(expression), d_name(name) {
@@ -96,7 +96,7 @@ class UnaryOperatorNode : public EvalNode {
     Function d_function;
     public:
     virtual double eval() {
-        return d_function(d_node->eval());   
+        return d_function(d_node->calc());
     };
     UnaryOperatorNode(const EvalNode::Ptr &node, const Function &function)
         : d_node(node), d_function(function) {
@@ -113,7 +113,7 @@ class BinaryOperatorNode : public EvalNode {
     Function d_function;
     public:
     virtual double eval() {
-        return d_function(d_leftNode->eval(), d_rightNode->eval());   
+        return d_function(d_leftNode->calc(), d_rightNode->calc());
     };
     BinaryOperatorNode(const EvalNode::Ptr& leftNode, const EvalNode::Ptr& rightNode, const Function& function) :
         d_leftNode(leftNode), d_rightNode(rightNode), d_function(function) {
