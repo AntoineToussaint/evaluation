@@ -32,6 +32,9 @@ def replace_in_expression(expr, variable_values):
         expr = expr.replace(variable, str(value))
     return expr
 
+def boost_close_check(value, name):
+    return 'BOOST_CHECK_CLOSE({value}, context.calc("{name}"), 0.001 );'.format(value=value, name=name)
+
 class EvaluationTest:
     def __init__(self, expressions, variable_values = None):
         self.expressions = expressions
@@ -52,7 +55,7 @@ class EvaluationTest:
         replacements['INPUT'] = '\n'.join(['// %s' % expr for expr in self.expressions])
         replacements['SET_VARIABLES'] = '\n'.join(['context.setVariable("%s", %s);' % (variable, value) for variable, value in
                 self.variable_values.items()]) 
-        replacements['CHECKS'] = '\n'.join(['BOOST_CHECK(%s == context.calc("%s"));' % (value, name) for name, value in
+        replacements['CHECKS'] = '\n'.join([boost_close_check(value, name) for name, value in
             self.new_values.items()])
         result = replace_in_expression(result, replacements)
         return result

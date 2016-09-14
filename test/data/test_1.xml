@@ -1,1 +1,0 @@
-<root><!--X=exp(y)--><variable value="X"><un_op type="exp"><variable value="y" /></un_op></variable><!--Z=1*X--><variable value="Z"><bin_op type="*"><constant value="1.0" /><variable value="X" /></bin_op></variable></root>

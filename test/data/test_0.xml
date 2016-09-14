@@ -1,1 +1,0 @@
-<root><!--X=3--><variable value="X"><constant value="3.0" /></variable><!--Y=X+1+2+z--><variable value="Y"><bin_op type="+"><variable value="X" /><bin_op type="+"><constant value="1.0" /><bin_op type="+"><constant value="2.0" /><variable value="z" /></bin_op></bin_op></bin_op></variable></root>
