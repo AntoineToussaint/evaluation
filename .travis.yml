@@ -11,7 +11,6 @@ compiler:
 before_install:
   - sudo apt-get update -qq
   - sudo apt-get install libboost-thread-dev libboost-system-dev libboost-test-dev libboost-filesystem-dev
-before_script:
   - sudo pip install -r requirements.txt
 # Build steps
 script:
