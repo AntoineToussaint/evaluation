@@ -11,21 +11,9 @@
 #include <map>
 
 class EvalNode {
-    double d_cachedValue = nan("");
     public:
     using Ptr = std::shared_ptr<EvalNode>;
-    double calc() {
-        if (std::isnan(d_cachedValue) || needCalc()) {
-            auto value = eval();
-            d_cachedValue = value;
-            return value;
-        } else {
-            std::cout << "Using cache" << std::endl;
-            return d_cachedValue;
-        }
-    }
     virtual double eval() = 0;
-    virtual bool needCalc() { return true; }
     virtual ~EvalNode();
 };
 
@@ -41,7 +29,6 @@ class ExpressionNode : public EvalNode {
         : d_expression(expression), d_name(name) {
       std::cout << "Expression created: " << d_name << std::endl;
     }
-    virtual bool needCalc() { return d_expression->needCalc(); }
     
 };
 
@@ -59,11 +46,9 @@ class ConstantNode : public EvalNode {
     ConstantNode(const T& value) : d_value(static_cast<double>(value)) {
       std::cout << "Constant created: " << d_value << std::endl;
     }
-    virtual bool needCalc() { return false; }
 };
 
 class VariableNode: public EvalNode {
-    bool d_needCalc = true;
     double d_value = nan("");
     std::string d_name;
     public:
@@ -80,12 +65,7 @@ class VariableNode: public EvalNode {
     }
     void set(double value) {
         d_value = value;
-        d_needCalc = true;
     }
-    void cache() {
-        d_needCalc = false;
-    }
-    virtual bool needCalc() { return d_needCalc; }
 };
 
 class UnaryOperatorNode : public EvalNode {
@@ -102,7 +82,6 @@ class UnaryOperatorNode : public EvalNode {
         : d_node(node), d_function(function) {
       std::cout << "UnaryOperatorNode created: " << std::endl;
     }
-    virtual bool needCalc() { return d_node->needCalc(); }
 };
 
 class BinaryOperatorNode : public EvalNode {
@@ -119,7 +98,6 @@ class BinaryOperatorNode : public EvalNode {
         d_leftNode(leftNode), d_rightNode(rightNode), d_function(function) {
       std::cout << "BinaryOperatorNode created: " << std::endl;
     }
-    virtual bool needCalc() { return d_leftNode->needCalc() || d_rightNode->needCalc(); }
 };
 
 class EvaluationContext {
@@ -161,15 +139,9 @@ class EvaluationContext {
     
     
     double calc(const std::string& expression_name) {
-        for(auto& expression : d_expressions) {
-            expression->calc();
-        }
-        for(auto& kv : d_variableMap) {
-            kv.second->cache();
-        }
         if (d_expressionMap.find(expression_name) == d_expressionMap.end())
             throw std::runtime_error("Not found");
-        return d_expressionMap[expression_name]->calc();
+        return d_expressionMap[expression_name]->eval();
     }
     
     
